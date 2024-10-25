@@ -6,7 +6,7 @@ let deck = [];              // Stores the Pokémon added to the deck
 let allTypesSet = new Set(); // Stores all unique types
 
 // Fetch and parse the CSV data
-fetch('pokemons-data.csv')
+fetch('./pokemons-data.csv')
     .then(response => response.text())
     .then(csvData => {
         pokemonData = parseCSV(csvData);
@@ -87,7 +87,7 @@ function createTypeFilter() {
         label.classList.add('type-option');
         label.innerHTML = `
             <input type="radio" name="type" value="${type.toLowerCase()}" onchange="filterPokemon()">
-            <img src="types/${type.toUpperCase()}.svg" alt="${type}" title="${type.charAt(0).toUpperCase() + type.slice(1).toLowerCase()}">
+            <img src="./types/${type.toUpperCase()}.svg" alt="${type}" title="${type.charAt(0).toUpperCase() + type.slice(1).toLowerCase()}">
         `;
         typeFilterDiv.appendChild(label);
     });
@@ -107,9 +107,9 @@ function getPokemonImagePath(pokemon) {
     let imgPath = '';
     if (indexNumber.includes('-')) {
         const parts = indexNumber.split('-');
-        imgPath = `portrait/${parts[0]}/${parts[1]}/Normal.png`;
+        imgPath = `./portrait/${parts[0]}/${parts[1]}/Normal.png`;
     } else {
-        imgPath = `portrait/${indexPath}/Normal.png`;
+        imgPath = `./portrait/${indexPath}/Normal.png`;
     }
     return imgPath;
 }
@@ -258,7 +258,7 @@ function updateSynergies() {
 
         // Create the type icon
         const typeIcon = document.createElement('img');
-        typeIcon.src = `types/${type.toUpperCase()}.svg`;
+        typeIcon.src = `./types/${type.toUpperCase()}.svg`;
         typeIcon.alt = type;
         typeIcon.title = `${type.charAt(0).toUpperCase() + type.slice(1).toLowerCase()} (${count})`;
         typeIcon.classList.add('synergy-icon');
@@ -306,7 +306,7 @@ function displayPokemonInfo(pokemonId) {
 
     types.forEach(type => {
         const typeIcon = document.createElement('img');
-        typeIcon.src = `types/${type.toUpperCase()}.svg`;
+        typeIcon.src = `./types/${type.toUpperCase()}.svg`;
         typeIcon.alt = type;
         typeIcon.title = type.charAt(0).toUpperCase() + type.slice(1).toLowerCase();
         typeIcon.classList.add('info-type-icon');
