@@ -25,7 +25,7 @@ h1, h2 {
 #rarity-filter, #type-filter {
     display: inline-block;
     margin: 0 10px;
-    text-align: left;
+    text-align: center;
 }
 
 #rarity-filter h3, #type-filter h3 {
@@ -34,7 +34,8 @@ h1, h2 {
 
 #rarity-filter label, #type-filter label {
     display: inline-block;
-    margin-right: 10px;
+    margin: 5px;
+    cursor: pointer;
 }
 
 #team-container {
@@ -134,4 +135,46 @@ h1, h2 {
 
 .pokemon-container.hidden {
     display: none;
+}
+
+/* Style for the type filter options */
+#type-filter {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+#type-filter label.type-option {
+    margin: 5px;
+    cursor: pointer;
+}
+
+#type-filter label.type-option input[type="radio"] {
+    display: none; /* Hide the radio button */
+}
+
+#type-filter label.type-option img,
+#type-filter label.type-option span.type-all {
+    width: 40px;
+    height: 40px;
+    border: 2px solid transparent;
+    border-radius: 5px;
+}
+
+#type-filter label.type-option img {
+    object-fit: cover;
+}
+
+#type-filter label.type-option span.type-all {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ccc;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+#type-filter label.type-option input[type="radio"]:checked + img,
+#type-filter label.type-option input[type="radio"]:checked + span.type-all {
+    border-color: #000; /* Highlight selected type */
 }

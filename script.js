@@ -12,7 +12,7 @@ Promise.all([
     pokemonTypes = typesData;
     createPokemonTypeMapping();
     createPokemonRarityMapping(rarityData);
-    createTypeFilter(); // Generate the type filter dynamically
+    createTypeFilter(); // Generate the type filter dynamically with images
     displayPokemonPool();
 })
 .catch(error => console.error('Error fetching data:', error));
@@ -38,14 +38,18 @@ function createPokemonRarityMapping(rarityData) {
     }
 }
 
-// Create the type filter dynamically based on the types in pokemonTypes
+// Create the type filter dynamically based on the types in pokemonTypes, using images
 function createTypeFilter() {
     const typeFilterDiv = document.getElementById('type-filter');
     typeFilterDiv.innerHTML = '<h3>Filter by Type:</h3>';
 
-    // Add the 'All' option
+    // Add the 'All' option with a default icon or text
     const allLabel = document.createElement('label');
-    allLabel.innerHTML = '<input type="radio" name="type" value="all" checked onchange="filterPokemon()"> All';
+    allLabel.classList.add('type-option');
+    allLabel.innerHTML = `
+        <input type="radio" name="type" value="all" checked onchange="filterPokemon()">
+        <span class="type-all">All</span>
+    `;
     typeFilterDiv.appendChild(allLabel);
 
     // Get the types and sort them alphabetically for better UX
@@ -53,7 +57,11 @@ function createTypeFilter() {
 
     types.forEach(type => {
         const label = document.createElement('label');
-        label.innerHTML = `<input type="radio" name="type" value="${type.toLowerCase()}" onchange="filterPokemon()"> ${type.charAt(0).toUpperCase() + type.slice(1).toLowerCase()}`;
+        label.classList.add('type-option');
+        label.innerHTML = `
+            <input type="radio" name="type" value="${type.toLowerCase()}" onchange="filterPokemon()">
+            <img src="types/${type.toUpperCase()}.svg" alt="${type}" title="${type.charAt(0).toUpperCase() + type.slice(1).toLowerCase()}">
+        `;
         typeFilterDiv.appendChild(label);
     });
 }
@@ -223,7 +231,7 @@ function filterPokemon() {
         // Check if Pokémon matches search input, selected rarity, and selected type
         const matchesName = name.includes(input);
         const matchesRarity = selectedRarity === 'all' || rarity === selectedRarity;
-        const matchesType = selectedType === 'all' || types.includes(selectedType);
+        const matchesType = selectedType === 'all' || types.map(t => t.toLowerCase()).includes(selectedType);
 
         if (matchesName && matchesRarity && matchesType) {
             container.classList.remove('hidden');
