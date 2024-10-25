@@ -166,13 +166,11 @@ function displayPokemonPool() {
         img.id = name;
         img.addEventListener('dragstart', drag);
 
-        // Add single-click event to display Pokémon info
-        img.addEventListener('click', () => displayPokemonInfo(name));
+        img.addEventListener('mouseover', () => displayPokemonInfo(name));
+        img.addEventListener('mouseout', clearPokemonInfo);
 
-        // Add double-click event to add Pokémon to the team
         img.addEventListener('dblclick', () => addToTeam(name));
 
-        // Get the rarity of the Pokémon
         const rarity = pokemonRarities[name] ? pokemonRarities[name].toLowerCase() : 'unknown';
 
         // Create a label or badge for the rarity
@@ -245,14 +243,16 @@ function addToTeam(pokemonId) {
     const clone = pokemonImg.cloneNode(true);
     clone.removeEventListener('dragstart', drag);
     clone.addEventListener('dblclick', () => removeFromDeck(pokemonId, cloneContainer));
-    clone.addEventListener('click', () => displayPokemonInfo(pokemonId)); // Add click event to display info
+    clone.addEventListener('mouseover', () => displayPokemonInfo(pokemonId));
+    clone.addEventListener('mouseout', clearPokemonInfo);
+
     clone.style.cursor = 'pointer';
 
     // Add a transition effect to the clone
     cloneContainer.style.transition = 'transform 0.3s ease';
-    cloneContainer.style.transform = 'scale(0.8)'; // Start slightly smaller
+    cloneContainer.style.transform = 'scale(0.8)';
     setTimeout(() => {
-        cloneContainer.style.transform = 'scale(1)'; // Grow to full size
+        cloneContainer.style.transform = 'scale(1)';
     }, 100);
 
     // Get the rarity
