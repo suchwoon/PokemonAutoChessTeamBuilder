@@ -248,6 +248,13 @@ function addToTeam(pokemonId) {
     clone.addEventListener('click', () => displayPokemonInfo(pokemonId)); // Add click event to display info
     clone.style.cursor = 'pointer';
 
+    // Add a transition effect to the clone
+    cloneContainer.style.transition = 'transform 0.3s ease';
+    cloneContainer.style.transform = 'scale(0.8)'; // Start slightly smaller
+    setTimeout(() => {
+        cloneContainer.style.transform = 'scale(1)'; // Grow to full size
+    }, 100);
+
     // Get the rarity
     const rarity = pokemonRarities[pokemonId] ? pokemonRarities[pokemonId].toLowerCase() : 'unknown';
     const rarityLabel = document.createElement('span');

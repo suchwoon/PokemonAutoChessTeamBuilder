@@ -1,10 +1,18 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Poppins', Arial, sans-serif;
     margin: 20px;
+    background: linear-gradient(to bottom, #f0f4ff, #e8f0ff);
 }
 
 h1, h2 {
     text-align: center;
+    font-family: 'Poppins', Arial, sans-serif;
+    font-weight: 600;
+}
+
+p, input, label {
+    font-family: 'Poppins', Arial, sans-serif;
+    font-weight: 400;
 }
 
 #controls {
@@ -20,6 +28,16 @@ h1, h2 {
     width: 50%;
     padding: 10px;
     font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    transition: border-color 0.3s;
+}
+
+#search-input:hover,
+#search-input:focus {
+    border-color: #666;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 }
 
 #rarity-filter, #type-filter {
@@ -113,6 +131,14 @@ h1, h2 {
     margin: 5px;
     width: 80px;
     height: 80px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.pokemon-container:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 10px rgba(0, 0, 0, 0.2);
 }
 
 .pokemon {
@@ -135,6 +161,39 @@ h1, h2 {
     font-size: 12px;
     border-top-right-radius: 5px;
 }
+
+/* Rarity Filter - Add colors to each option */
+#rarity-filter label {
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+#rarity-filter input[value="all"] + label { color: #000 }
+#rarity-filter input[value="common"] + label { background-color: #a0a0a0; }
+#rarity-filter input[value="uncommon"] + label { background-color: #3bc95e; }
+#rarity-filter input[value="rare"] + label { background-color: #41bfcc; }
+#rarity-filter input[value="epic"] + label { background-color: #ca6cee; }
+#rarity-filter input[value="ultra"] + label { background-color: #e53b3b; }
+#rarity-filter input[value="unique"] + label { background-color: #000; color: #fff; }
+#rarity-filter input[value="legendary"] + label { background-color: #e6cb49; }
+#rarity-filter input[value="mythical"] + label { background-color: #ff69b4; }
+#rarity-filter input[value="special"] + label { background-color: #907af2; }
+#rarity-filter input[value="hatch"] + label { background-color: #b9915a; }
+
+/* Hover effect to make interaction clearer */
+#rarity-filter label:hover {
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+/* Indicate the selected filter */
+#rarity-filter input[type="radio"]:checked + label {
+    border: 2px solid #000;
+}
+
 
 .rarity-label.common {
     background-color: #a0a0a0;
@@ -177,7 +236,6 @@ h1, h2 {
     display: none;
 }
 
-/* Style for the type filter options */
 #type-filter {
     display: flex;
     flex-wrap: wrap;
@@ -190,7 +248,7 @@ h1, h2 {
 }
 
 #type-filter label.type-option input[type="radio"] {
-    display: none; /* Hide the radio button */
+    display: none;
 }
 
 #type-filter label.type-option img,
@@ -205,6 +263,18 @@ h1, h2 {
     object-fit: cover;
 }
 
+#type-filter label.type-option img,
+#type-filter label.type-option span.type-all {
+    transition: transform 0.2s, border-color 0.3s;
+}
+
+/* Enlarge the icon slightly when hovered */
+#type-filter label.type-option:hover img,
+#type-filter label.type-option:hover span.type-all {
+    transform: scale(1.1);
+    border-color: #333; /* Darken border */
+}
+
 #type-filter label.type-option span.type-all {
     display: flex;
     align-items: center;
@@ -216,17 +286,15 @@ h1, h2 {
 
 #type-filter label.type-option input[type="radio"]:checked + img,
 #type-filter label.type-option input[type="radio"]:checked + span.type-all {
-    border-color: #000; /* Highlight selected type */
+    border-color: #000;
 }
 
-/* Styles for the team container to accommodate the info box */
 #team-container {
     display: flex;
     margin-bottom: 20px;
     justify-content: center;
 }
 
-/* Styles for the Pokémon Info box */
 #pokemon-info {
     width: 200px;
     margin-left: 20px;
@@ -244,7 +312,6 @@ h1, h2 {
     height: 100px;
 }
 
-/* Styles for the type icons in the Info box */
 .info-type-icons {
     display: flex;
     justify-content: center;
@@ -257,7 +324,6 @@ h1, h2 {
     margin: 5px;
 }
 
-/* Adjusted team content to flex */
 #team-content {
     flex: 1;
 }

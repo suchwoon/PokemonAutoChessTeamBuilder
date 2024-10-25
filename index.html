@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Pokémon Team Builder</title>
     <link rel="stylesheet" href="./styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
     <h1>Pokémon Team Builder</h1>
@@ -28,17 +29,38 @@
 
         <!-- Rarity Filter -->
         <div id="rarity-filter">
-            <label><input type="radio" name="rarity" value="all" checked onchange="filterPokemon()"> All</label>
-            <label><input type="radio" name="rarity" value="common" onchange="filterPokemon()"> Common</label>
-            <label><input type="radio" name="rarity" value="uncommon" onchange="filterPokemon()"> Uncommon</label>
-            <label><input type="radio" name="rarity" value="rare" onchange="filterPokemon()"> Rare</label>
-            <label><input type="radio" name="rarity" value="epic" onchange="filterPokemon()"> Epic</label>
-            <label><input type="radio" name="rarity" value="ultra" onchange="filterPokemon()"> Ultra</label>
-            <label><input type="radio" name="rarity" value="unique" onchange="filterPokemon()"> Unique</label>
-            <label><input type="radio" name="rarity" value="legendary" onchange="filterPokemon()"> Legendary</label>
-            <label><input type="radio" name="rarity" value="mythical" onchange="filterPokemon()"> Mythical</label>
-            <label><input type="radio" name="rarity" value="special" onchange="filterPokemon()"> Special</label>
-            <label><input type="radio" name="rarity" value="hatch" onchange="filterPokemon()"> Hatch</label>
+            <input type="radio" id="all" name="rarity" value="all" checked onchange="filterPokemon()">
+            <label for="all">All</label>
+            
+            <input type="radio" id="common" name="rarity" value="common" onchange="filterPokemon()">
+            <label for="common">Common</label>
+            
+            <input type="radio" id="uncommon" name="rarity" value="uncommon" onchange="filterPokemon()">
+            <label for="uncommon">Uncommon</label>
+            
+            <input type="radio" id="rare" name="rarity" value="rare" onchange="filterPokemon()">
+            <label for="rare">Rare</label>
+            
+            <input type="radio" id="epic" name="rarity" value="epic" onchange="filterPokemon()">
+            <label for="epic">Epic</label>
+            
+            <input type="radio" id="ultra" name="rarity" value="ultra" onchange="filterPokemon()">
+            <label for="ultra">Ultra</label>
+            
+            <input type="radio" id="unique" name="rarity" value="unique" onchange="filterPokemon()">
+            <label for="unique">Unique</label>
+            
+            <input type="radio" id="legendary" name="rarity" value="legendary" onchange="filterPokemon()">
+            <label for="legendary">Legendary</label>
+            
+            <input type="radio" id="mythical" name="rarity" value="mythical" onchange="filterPokemon()">
+            <label for="mythical">Mythical</label>
+            
+            <input type="radio" id="special" name="rarity" value="special" onchange="filterPokemon()">
+            <label for="special">Special</label>
+            
+            <input type="radio" id="hatch" name="rarity" value="hatch" onchange="filterPokemon()">
+            <label for="hatch">Hatch</label>
         </div>
 
         <!-- Type Filter (Will be populated dynamically) -->
