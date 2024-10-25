@@ -15,6 +15,9 @@
             <h2>Your Team</h2>
             <div id="deck-area" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
         </div>
+        <div id="pokemon-info">
+            <!-- Pokémon Info will be displayed here -->
+        </div>
     </div>
 
     <!-- Search and Filters -->
@@ -25,7 +28,7 @@
 
         <!-- Rarity Filter -->
         <div id="rarity-filter">
-            <!-- Removed the "Filter by Rarity" text -->
+            <!-- Added new rarities -->
             <label><input type="radio" name="rarity" value="all" checked onchange="filterPokemon()"> All</label>
             <label><input type="radio" name="rarity" value="common" onchange="filterPokemon()"> Common</label>
             <label><input type="radio" name="rarity" value="uncommon" onchange="filterPokemon()"> Uncommon</label>
@@ -34,6 +37,9 @@
             <label><input type="radio" name="rarity" value="ultra" onchange="filterPokemon()"> Ultra</label>
             <label><input type="radio" name="rarity" value="unique" onchange="filterPokemon()"> Unique</label>
             <label><input type="radio" name="rarity" value="legendary" onchange="filterPokemon()"> Legendary</label>
+            <label><input type="radio" name="rarity" value="mythical" onchange="filterPokemon()"> Mythical</label>
+            <label><input type="radio" name="rarity" value="special" onchange="filterPokemon()"> Special</label>
+            <label><input type="radio" name="rarity" value="hatch" onchange="filterPokemon()"> Hatch</label>
         </div>
 
         <!-- Type Filter (Will be populated dynamically) -->

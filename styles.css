@@ -209,3 +209,46 @@ h1, h2 {
 #type-filter label.type-option input[type="radio"]:checked + span.type-all {
     border-color: #000; /* Highlight selected type */
 }
+
+/* Styles for the team container to accommodate the info box */
+#team-container {
+    display: flex;
+    margin-bottom: 20px;
+    justify-content: center;
+}
+
+/* Styles for the Pokémon Info box */
+#pokemon-info {
+    width: 200px;
+    margin-left: 20px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+}
+
+.info-image-container {
+    margin-bottom: 10px;
+}
+
+.info-pokemon-image {
+    width: 100px;
+    height: 100px;
+}
+
+/* Styles for the type icons in the Info box */
+.info-type-icons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.info-type-icon {
+    width: 50px;
+    height: 50px;
+    margin: 5px;
+}
+
+/* Adjusted team content to flex */
+#team-content {
+    flex: 1;
+}

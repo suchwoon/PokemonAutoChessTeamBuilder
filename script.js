@@ -66,6 +66,25 @@ function createTypeFilter() {
     });
 }
 
+// Function to get the image path for a Pokémon
+function getPokemonImagePath(pokemon) {
+    const indexNumber = PkmIndex[pokemon.toUpperCase()];
+    if (!indexNumber) {
+        console.warn(`Index number not found for Pokémon: ${pokemon}`);
+        return null; // Return null if index number is not found
+    }
+
+    // Build the image path
+    let imgPath = '';
+    if (indexNumber.includes('-')) {
+        const parts = indexNumber.split('-');
+        imgPath = `portrait/${parts[0]}/${parts[1]}/Normal.png`;
+    } else {
+        imgPath = `portrait/${indexNumber}/Normal.png`;
+    }
+    return imgPath;
+}
+
 // Display all Pokémon in the pool
 function displayPokemonPool() {
     const pool = document.getElementById('pokemon-pool');
@@ -74,20 +93,8 @@ function displayPokemonPool() {
 
     for (let pokemon in pokemonToTypes) {
         if (!addedPokemons.has(pokemon)) {
-            const indexNumber = PkmIndex[pokemon.toUpperCase()];
-            if (!indexNumber) {
-                console.warn(`Index number not found for Pokémon: ${pokemon}`);
-                continue; // Skip this Pokémon if index number is not found
-            }
-
-            // Build the image path
-            let imgPath = '';
-            if (indexNumber.includes('-')) {
-                const parts = indexNumber.split('-');
-                imgPath = `portrait/${parts[0]}/${parts[1]}/Normal.png`;
-            } else {
-                imgPath = `portrait/${indexNumber}/Normal.png`;
-            }
+            const imgPath = getPokemonImagePath(pokemon);
+            if (!imgPath) continue; // Skip if image path is not found
 
             const imgContainer = document.createElement('div');
             imgContainer.classList.add('pokemon-container', 'pool-pokemon-container'); // Add specific class
@@ -101,16 +108,19 @@ function displayPokemonPool() {
             img.id = pokemon;
             img.addEventListener('dragstart', drag);
 
+            // Add single-click event to display Pokémon info
+            img.addEventListener('click', () => displayPokemonInfo(pokemon));
+
             // Add double-click event to add Pokémon to the team
             img.addEventListener('dblclick', () => addToTeam(pokemon));
 
             // Get the rarity of the Pokémon
-            const rarity = pokemonRarities[pokemon] || 'UNKNOWN';
+            const rarity = pokemonRarities[pokemon] ? pokemonRarities[pokemon].toLowerCase() : 'unknown';
 
             // Create a label or badge for the rarity
             const rarityLabel = document.createElement('span');
-            rarityLabel.classList.add('rarity-label', rarity.toLowerCase());
-            rarityLabel.textContent = rarity;
+            rarityLabel.classList.add('rarity-label', rarity);
+            rarityLabel.textContent = rarity.charAt(0).toUpperCase() + rarity.slice(1);
 
             // Append the image and rarity label to the container
             imgContainer.appendChild(img);
@@ -158,13 +168,14 @@ function addToTeam(pokemonId) {
     const clone = pokemonImg.cloneNode(true);
     clone.removeEventListener('dragstart', drag);
     clone.addEventListener('dblclick', () => removeFromDeck(pokemonId, cloneContainer));
+    clone.addEventListener('click', () => displayPokemonInfo(pokemonId)); // Add click event to display info
     clone.style.cursor = 'pointer';
 
     // Get the rarity
-    const rarity = pokemonRarities[pokemonId] || 'UNKNOWN';
+    const rarity = pokemonRarities[pokemonId] ? pokemonRarities[pokemonId].toLowerCase() : 'unknown';
     const rarityLabel = document.createElement('span');
-    rarityLabel.classList.add('rarity-label', rarity.toLowerCase());
-    rarityLabel.textContent = rarity;
+    rarityLabel.classList.add('rarity-label', rarity);
+    rarityLabel.textContent = rarity.charAt(0).toUpperCase() + rarity.slice(1);
 
     cloneContainer.appendChild(clone);
     cloneContainer.appendChild(rarityLabel);
@@ -183,6 +194,11 @@ function removeFromDeck(pokemonId, containerElement) {
         deck.splice(index, 1);
         containerElement.parentNode.removeChild(containerElement);
         updateSynergies();
+        // Clear the Pokémon Info box if the removed Pokémon was selected
+        const selectedPokemonId = document.getElementById('pokemon-info').dataset.selectedPokemon;
+        if (selectedPokemonId === pokemonId) {
+            clearPokemonInfo();
+        }
     }
 }
 
@@ -232,6 +248,56 @@ function updateSynergies() {
     });
 
     synergyDisplay.appendChild(synergyContainer);
+}
+
+// Display Pokémon info when a Pokémon is clicked
+function displayPokemonInfo(pokemonId) {
+    const infoBox = document.getElementById('pokemon-info');
+    infoBox.innerHTML = ''; // Clear previous info
+    infoBox.dataset.selectedPokemon = pokemonId; // Store selected Pokémon ID
+
+    // Get the Pokémon's types
+    const types = pokemonToTypes[pokemonId];
+
+    // Create a container for the Pokémon image
+    const imageContainer = document.createElement('div');
+    imageContainer.classList.add('info-image-container');
+
+    // Get the image path
+    const imgPath = getPokemonImagePath(pokemonId);
+
+    const pokemonImage = document.createElement('img');
+    pokemonImage.src = imgPath;
+    pokemonImage.alt = pokemonId;
+    pokemonImage.title = pokemonId;
+    pokemonImage.classList.add('info-pokemon-image');
+
+    imageContainer.appendChild(pokemonImage);
+
+    // Create a container for the type icons
+    const typeContainer = document.createElement('div');
+    typeContainer.classList.add('info-type-icons');
+
+    types.forEach(type => {
+        const typeIcon = document.createElement('img');
+        typeIcon.src = `types/${type.toUpperCase()}.svg`;
+        typeIcon.alt = type;
+        typeIcon.title = type.charAt(0).toUpperCase() + type.slice(1).toLowerCase();
+        typeIcon.classList.add('info-type-icon');
+
+        typeContainer.appendChild(typeIcon);
+    });
+
+    // Append the Pokémon image and type icons to the info box
+    infoBox.appendChild(imageContainer);
+    infoBox.appendChild(typeContainer);
+}
+
+// Clear the Pokémon Info box
+function clearPokemonInfo() {
+    const infoBox = document.getElementById('pokemon-info');
+    infoBox.innerHTML = '';
+    delete infoBox.dataset.selectedPokemon;
 }
 
 // Filter Pokémon based on the search input, selected rarity, and selected type
