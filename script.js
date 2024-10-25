@@ -1,44 +1,71 @@
-let pokemonTypes = {};      // Stores the type-pokemons-all data
+let pokemonData = [];       // Stores the parsed Pokémon data
 let pokemonToTypes = {};    // Maps Pokémon to their types
 let pokemonRarities = {};   // Maps Pokémon to their rarity
+let PkmIndex = {};          // Maps Pokémon names to their index numbers
 let deck = [];              // Stores the Pokémon added to the deck
+let allTypesSet = new Set(); // Stores all unique types
 
-// Fetch the data
-Promise.all([
-    fetch('type-pokemons-all.json').then(response => response.json()),
-    fetch('type-rarity-all.json').then(response => response.json())
-])
-.then(([typesData, rarityData]) => {
-    pokemonTypes = typesData;
-    createPokemonTypeMapping();
-    createPokemonRarityMapping(rarityData);
-    createTypeFilter(); // Generate the type filter dynamically with images
-    displayPokemonPool();
-})
-.catch(error => console.error('Error fetching data:', error));
+// Fetch and parse the CSV data
+fetch('pokemons-data.csv')
+    .then(response => response.text())
+    .then(csvData => {
+        pokemonData = parseCSV(csvData);
+        processPokemonData();
+        createTypeFilter(); // Generate the type filter dynamically with images
+        displayPokemonPool();
+    })
+    .catch(error => console.error('Error fetching data:', error));
 
-// Create a mapping from Pokémon to their types
-function createPokemonTypeMapping() {
-    for (let type in pokemonTypes) {
-        pokemonTypes[type].forEach(pokemon => {
-            if (!pokemonToTypes[pokemon]) {
-                pokemonToTypes[pokemon] = [];
+// Function to parse CSV data
+function parseCSV(data) {
+    const lines = data.trim().split('\n');
+    const result = [];
+    const headers = lines[0].split(',');
+
+    for (let i = 1; i < lines.length; i++) {
+        const currentline = lines[i].split(',');
+
+        // Skip empty lines
+        if (currentline.length === 1 && currentline[0] === '') continue;
+
+        const obj = {};
+        for (let j = 0; j < headers.length; j++) {
+            const header = headers[j].trim();
+            const value = currentline[j] ? currentline[j].trim() : '';
+            obj[header] = value;
+        }
+        result.push(obj);
+    }
+    return result;
+}
+
+// Process the parsed Pokémon data to create necessary mappings
+function processPokemonData() {
+    pokemonData.forEach(pokemon => {
+        const name = pokemon['Name'].toUpperCase();
+        const index = pokemon['Index'];
+        const rarity = pokemon['Category'].toLowerCase();
+
+        // Map name to index
+        PkmIndex[name] = index;
+
+        // Map name to rarity
+        pokemonRarities[name] = rarity;
+
+        // Map name to types
+        const types = [];
+        for (let i = 1; i <= 4; i++) {
+            const type = pokemon[`Type ${i}`];
+            if (type) {
+                types.push(type.toUpperCase());
+                allTypesSet.add(type.toUpperCase());
             }
-            pokemonToTypes[pokemon].push(type);
-        });
-    }
+        }
+        pokemonToTypes[name] = types;
+    });
 }
 
-// Create a mapping from Pokémon to their rarity
-function createPokemonRarityMapping(rarityData) {
-    for (let rarity in rarityData) {
-        rarityData[rarity].forEach(pokemon => {
-            pokemonRarities[pokemon] = rarity;
-        });
-    }
-}
-
-// Create the type filter dynamically based on the types in pokemonTypes, using images
+// Create the type filter dynamically based on the types in pokemonData, using images
 function createTypeFilter() {
     const typeFilterDiv = document.getElementById('type-filter');
     typeFilterDiv.innerHTML = ''; // Removed the heading
@@ -53,7 +80,7 @@ function createTypeFilter() {
     typeFilterDiv.appendChild(allLabel);
 
     // Get the types and sort them alphabetically for better UX
-    const types = Object.keys(pokemonTypes).sort();
+    const types = Array.from(allTypesSet).sort();
 
     types.forEach(type => {
         const label = document.createElement('label');
@@ -68,11 +95,13 @@ function createTypeFilter() {
 
 // Function to get the image path for a Pokémon
 function getPokemonImagePath(pokemon) {
-    const indexNumber = PkmIndex[pokemon.toUpperCase()];
+    const indexNumber = PkmIndex[pokemon];
     if (!indexNumber) {
         console.warn(`Index number not found for Pokémon: ${pokemon}`);
         return null; // Return null if index number is not found
     }
+
+    const indexPath = indexNumber;
 
     // Build the image path
     let imgPath = '';
@@ -80,7 +109,7 @@ function getPokemonImagePath(pokemon) {
         const parts = indexNumber.split('-');
         imgPath = `portrait/${parts[0]}/${parts[1]}/Normal.png`;
     } else {
-        imgPath = `portrait/${indexNumber}/Normal.png`;
+        imgPath = `portrait/${indexPath}/Normal.png`;
     }
     return imgPath;
 }
@@ -89,47 +118,44 @@ function getPokemonImagePath(pokemon) {
 function displayPokemonPool() {
     const pool = document.getElementById('pokemon-pool');
     pool.innerHTML = ''; // Clear the pool
-    const addedPokemons = new Set();
 
-    for (let pokemon in pokemonToTypes) {
-        if (!addedPokemons.has(pokemon)) {
-            const imgPath = getPokemonImagePath(pokemon);
-            if (!imgPath) continue; // Skip if image path is not found
+    pokemonData.forEach(pokemon => {
+        const name = pokemon['Name'].toUpperCase();
+        const imgPath = getPokemonImagePath(name);
+        if (!imgPath) return; // Skip if image path is not found
 
-            const imgContainer = document.createElement('div');
-            imgContainer.classList.add('pokemon-container', 'pool-pokemon-container'); // Add specific class
+        const imgContainer = document.createElement('div');
+        imgContainer.classList.add('pokemon-container', 'pool-pokemon-container'); // Add specific class
 
-            const img = document.createElement('img');
-            img.src = imgPath;
-            img.alt = pokemon;
-            img.title = pokemon;
-            img.classList.add('pokemon');
-            img.draggable = true;
-            img.id = pokemon;
-            img.addEventListener('dragstart', drag);
+        const img = document.createElement('img');
+        img.src = imgPath;
+        img.alt = name;
+        img.title = name;
+        img.classList.add('pokemon');
+        img.draggable = true;
+        img.id = name;
+        img.addEventListener('dragstart', drag);
 
-            // Add single-click event to display Pokémon info
-            img.addEventListener('click', () => displayPokemonInfo(pokemon));
+        // Add single-click event to display Pokémon info
+        img.addEventListener('click', () => displayPokemonInfo(name));
 
-            // Add double-click event to add Pokémon to the team
-            img.addEventListener('dblclick', () => addToTeam(pokemon));
+        // Add double-click event to add Pokémon to the team
+        img.addEventListener('dblclick', () => addToTeam(name));
 
-            // Get the rarity of the Pokémon
-            const rarity = pokemonRarities[pokemon] ? pokemonRarities[pokemon].toLowerCase() : 'unknown';
+        // Get the rarity of the Pokémon
+        const rarity = pokemonRarities[name] ? pokemonRarities[name].toLowerCase() : 'unknown';
 
-            // Create a label or badge for the rarity
-            const rarityLabel = document.createElement('span');
-            rarityLabel.classList.add('rarity-label', rarity);
-            rarityLabel.textContent = rarity.charAt(0).toUpperCase() + rarity.slice(1);
+        // Create a label or badge for the rarity
+        const rarityLabel = document.createElement('span');
+        rarityLabel.classList.add('rarity-label', rarity);
+        rarityLabel.textContent = rarity.charAt(0).toUpperCase() + rarity.slice(1);
 
-            // Append the image and rarity label to the container
-            imgContainer.appendChild(img);
-            imgContainer.appendChild(rarityLabel);
+        // Append the image and rarity label to the container
+        imgContainer.appendChild(img);
+        imgContainer.appendChild(rarityLabel);
 
-            pool.appendChild(imgContainer);
-            addedPokemons.add(pokemon);
-        }
-    }
+        pool.appendChild(imgContainer);
+    });
 
     // Apply filtering after displaying the pool
     filterPokemon();
