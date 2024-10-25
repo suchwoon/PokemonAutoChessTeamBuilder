@@ -12,6 +12,7 @@ Promise.all([
     pokemonTypes = typesData;
     createPokemonTypeMapping();
     createPokemonRarityMapping(rarityData);
+    createTypeFilter(); // Generate the type filter dynamically
     displayPokemonPool();
 })
 .catch(error => console.error('Error fetching data:', error));
@@ -35,6 +36,26 @@ function createPokemonRarityMapping(rarityData) {
             pokemonRarities[pokemon] = rarity;
         });
     }
+}
+
+// Create the type filter dynamically based on the types in pokemonTypes
+function createTypeFilter() {
+    const typeFilterDiv = document.getElementById('type-filter');
+    typeFilterDiv.innerHTML = '<h3>Filter by Type:</h3>';
+
+    // Add the 'All' option
+    const allLabel = document.createElement('label');
+    allLabel.innerHTML = '<input type="radio" name="type" value="all" checked onchange="filterPokemon()"> All';
+    typeFilterDiv.appendChild(allLabel);
+
+    // Get the types and sort them alphabetically for better UX
+    const types = Object.keys(pokemonTypes).sort();
+
+    types.forEach(type => {
+        const label = document.createElement('label');
+        label.innerHTML = `<input type="radio" name="type" value="${type.toLowerCase()}" onchange="filterPokemon()"> ${type.charAt(0).toUpperCase() + type.slice(1).toLowerCase()}`;
+        typeFilterDiv.appendChild(label);
+    });
 }
 
 // Display all Pokémon in the pool
