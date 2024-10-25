@@ -137,31 +137,40 @@ h1, h2 {
 }
 
 .rarity-label.common {
-    background-color: gray;
+    background-color: #a0a0a0;
 }
 
 .rarity-label.uncommon {
-    background-color: green;
+    background-color: #3bc95e;
 }
 
 .rarity-label.rare {
-    background-color: blue;
+    background-color: #41bfcc;
 }
 
 .rarity-label.epic {
-    background-color: purple;
+    background-color: #ca6cee;
 }
 
 .rarity-label.ultra {
-    background-color: orange;
+    background-color: #e53b3b;
 }
 
 .rarity-label.unique {
-    background-color: red;
+    background-color: #ffffff;
+    color: #000000;
 }
 
 .rarity-label.legendary {
-    background-color: gold;
+    background-color: #e6cb49;
+}
+
+.rarity-label.special {
+    background-color: #907af2;
+}
+
+.rarity-label.hatch {
+    background-color: #b9915a;
 }
 
 .pokemon-container.hidden {
