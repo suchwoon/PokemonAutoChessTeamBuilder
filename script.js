@@ -90,7 +90,7 @@ function displayPokemonPool() {
             }
 
             const imgContainer = document.createElement('div');
-            imgContainer.classList.add('pokemon-container');
+            imgContainer.classList.add('pokemon-container', 'pool-pokemon-container'); // Add specific class
 
             const img = document.createElement('img');
             img.src = imgPath;
@@ -246,7 +246,8 @@ function filterPokemon() {
     const typeRadio = document.querySelector('#type-filter input[name="type"]:checked');
     const selectedType = typeRadio ? typeRadio.value : 'all';
 
-    const pokemonContainers = document.getElementsByClassName('pokemon-container');
+    // Select only the Pokémon containers in the pool
+    const pokemonContainers = document.getElementsByClassName('pool-pokemon-container');
 
     Array.from(pokemonContainers).forEach(container => {
         const pokemon = container.querySelector('.pokemon');
@@ -257,7 +258,7 @@ function filterPokemon() {
         // Check if Pokémon matches search input, selected rarity, and selected type
         const matchesName = name.includes(input);
         const matchesRarity = selectedRarity === 'all' || rarity === selectedRarity;
-        const matchesType = selectedType === 'all' || types.map(t => t.toLowerCase()).includes(selectedType);
+        const matchesType = selectedType === 'all' || types.includes(selectedType);
 
         if (matchesName && matchesRarity && matchesType) {
             container.classList.remove('hidden');
