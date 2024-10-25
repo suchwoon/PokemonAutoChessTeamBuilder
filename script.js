@@ -5,6 +5,28 @@ let PkmIndex = {};          // Maps Pokémon names to their index numbers
 let deck = [];              // Stores the Pokémon added to the deck
 let allTypesSet = new Set(); // Stores all unique types
 
+// Define the correct rarity order
+const rarityOrder = {
+    'common': 0,
+    'uncommon': 1,
+    'rare': 2,
+    'epic': 3,
+    'ultra': 4,
+    'unique': 5,
+    'legendary': 6,
+    'mythical': 7,
+    'special': 8,
+    'hatch': 9
+};
+
+// Define the custom type order for the filter buttons
+const customTypeOrder = [
+    'normal', 'grass', 'fire', 'water', 'electric', 'fighting', 'psychic', 'dark', 'steel',
+    'ground', 'poison', 'dragon', 'field', 'monster', 'human', 'aquatic', 'bug', 'flying', 'flora',
+    'rock', 'ghost', 'fairy', 'ice', 'fossil', 'sound', 'artificial', 'light', 'wild',
+    'baby', 'amorphous'
+];
+
 // Fetch and parse the CSV data
 fetch('./pokemons-data.csv')
     .then(response => response.text())
@@ -68,7 +90,7 @@ function processPokemonData() {
 // Create the type filter dynamically based on the types in pokemonData, using images
 function createTypeFilter() {
     const typeFilterDiv = document.getElementById('type-filter');
-    typeFilterDiv.innerHTML = ''; // Removed the heading
+    typeFilterDiv.innerHTML = '';
 
     // Add the 'All' option with a default icon or text
     const allLabel = document.createElement('label');
@@ -79,14 +101,22 @@ function createTypeFilter() {
     `;
     typeFilterDiv.appendChild(allLabel);
 
-    // Get the types and sort them alphabetically for better UX
-    const types = Array.from(allTypesSet).sort();
+    // Convert types to lowercase for consistency
+    const sortedTypes = Array.from(allTypesSet).map(type => type.toLowerCase());
 
-    types.forEach(type => {
+    // Sort the types according to the custom order
+    sortedTypes.sort((a, b) => {
+        const indexA = customTypeOrder.indexOf(a);
+        const indexB = customTypeOrder.indexOf(b);
+        return indexA - indexB;
+    });
+
+    // Create filter buttons for each type in the sorted order
+    sortedTypes.forEach(type => {
         const label = document.createElement('label');
         label.classList.add('type-option');
         label.innerHTML = `
-            <input type="radio" name="type" value="${type.toLowerCase()}" onchange="filterPokemon()">
+            <input type="radio" name="type" value="${type}" onchange="filterPokemon()">
             <img src="./types/${type.toUpperCase()}.svg" alt="${type}" title="${type.charAt(0).toUpperCase() + type.slice(1).toLowerCase()}">
         `;
         typeFilterDiv.appendChild(label);
@@ -159,6 +189,27 @@ function displayPokemonPool() {
 
     // Apply filtering after displaying the pool
     filterPokemon();
+}
+
+// Sorting function
+function sortPokemon() {
+    const sortBy = document.getElementById('sorting-select').value;
+
+    pokemonData.sort((a, b) => {
+        if (sortBy === 'name') {
+            return a['Name'].localeCompare(b['Name']);
+        } else if (sortBy === 'index') {
+            return parseInt(a['Index']) - parseInt(b['Index']);
+        } else if (sortBy === 'rarity') {
+            const rarityA = pokemonRarities[a['Name'].toUpperCase()];
+            const rarityB = pokemonRarities[b['Name'].toUpperCase()];
+            return rarityOrder[rarityA] - rarityOrder[rarityB];
+        }
+        return 0;
+    });
+
+    // Refresh the displayed pool after sorting
+    displayPokemonPool();
 }
 
 // Allow dropping on the deck area
@@ -282,6 +333,11 @@ function displayPokemonInfo(pokemonId) {
     infoBox.innerHTML = ''; // Clear previous info
     infoBox.dataset.selectedPokemon = pokemonId; // Store selected Pokémon ID
 
+    // Create a heading for the Pokémon's name
+    const nameHeading = document.createElement('h3');
+    nameHeading.textContent = pokemonId; // Set the name as the heading content
+    infoBox.appendChild(nameHeading);
+
     // Get the Pokémon's types
     const types = pokemonToTypes[pokemonId];
 
@@ -314,7 +370,7 @@ function displayPokemonInfo(pokemonId) {
         typeContainer.appendChild(typeIcon);
     });
 
-    // Append the Pokémon image and type icons to the info box
+    // Append the Pokémon name, image, and type icons to the info box
     infoBox.appendChild(imageContainer);
     infoBox.appendChild(typeContainer);
 }

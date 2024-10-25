@@ -28,7 +28,6 @@
 
         <!-- Rarity Filter -->
         <div id="rarity-filter">
-            <!-- Added new rarities -->
             <label><input type="radio" name="rarity" value="all" checked onchange="filterPokemon()"> All</label>
             <label><input type="radio" name="rarity" value="common" onchange="filterPokemon()"> Common</label>
             <label><input type="radio" name="rarity" value="uncommon" onchange="filterPokemon()"> Uncommon</label>
@@ -46,12 +45,21 @@
         <div id="type-filter">
             <!-- Dynamic content will be inserted here -->
         </div>
+
+        <!-- Sorting Dropdown -->
+        <div id="sorting-options">
+            <label for="sorting-select">Sort by:</label>
+            <select id="sorting-select" onchange="sortPokemon()">
+                <option value="name">Name</option>
+                <option value="index" selected>Pokédex Number</option>
+                <option value="rarity">Rarity</option>
+            </select>
+        </div>
     </div>
 
     <!-- Pokémon Pool -->
     <div id="pokemon-pool"></div>
 
-    <!-- Removed references to old scripts -->
     <script src="./script.js"></script>
 </body>
 </html>
