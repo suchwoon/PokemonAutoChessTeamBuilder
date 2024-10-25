@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pokémon Team Builder</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Pokémon Team Builder</h1>
+
+    <!-- Your Team Section -->
+    <div id="team-container">
+        <div id="synergy-display"></div>
+        <div id="team-content">
+            <h2>Your Team</h2>
+            <div id="deck-area" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+        </div>
+    </div>
+
+    <!-- Search and Filters -->
+    <div id="controls">
+        <div id="search-bar">
+            <input type="text" id="search-input" placeholder="Search Pokémon..." onkeyup="filterPokemon()">
+        </div>
+
+        <!-- Rarity Filter -->
+        <div id="rarity-filter">
+            <h3>Filter by Rarity:</h3>
+            <label><input type="radio" name="rarity" value="all" checked onchange="filterPokemon()"> All</label>
+            <label><input type="radio" name="rarity" value="common" onchange="filterPokemon()"> Common</label>
+            <label><input type="radio" name="rarity" value="uncommon" onchange="filterPokemon()"> Uncommon</label>
+            <label><input type="radio" name="rarity" value="rare" onchange="filterPokemon()"> Rare</label>
+            <label><input type="radio" name="rarity" value="epic" onchange="filterPokemon()"> Epic</label>
+            <label><input type="radio" name="rarity" value="ultra" onchange="filterPokemon()"> Ultra</label>
+            <label><input type="radio" name="rarity" value="unique" onchange="filterPokemon()"> Unique</label>
+            <label><input type="radio" name="rarity" value="legendary" onchange="filterPokemon()"> Legendary</label>
+        </div>
+
+        <!-- Type Filter -->
+        <div id="type-filter">
+            <h3>Filter by Type:</h3>
+            <label><input type="radio" name="type" value="all" checked onchange="filterPokemon()"> All</label>
+            <label><input type="radio" name="type" value="normal" onchange="filterPokemon()"> Normal</label>
+            <label><input type="radio" name="type" value="fire" onchange="filterPokemon()"> Fire</label>
+            <label><input type="radio" name="type" value="water" onchange="filterPokemon()"> Water</label>
+            <label><input type="radio" name="type" value="grass" onchange="filterPokemon()"> Grass</label>
+            <label><input type="radio" name="type" value="electric" onchange="filterPokemon()"> Electric</label>
+            <label><input type="radio" name="type" value="ice" onchange="filterPokemon()"> Ice</label>
+            <label><input type="radio" name="type" value="fighting" onchange="filterPokemon()"> Fighting</label>
+            <label><input type="radio" name="type" value="poison" onchange="filterPokemon()"> Poison</label>
+            <label><input type="radio" name="type" value="ground" onchange="filterPokemon()"> Ground</label>
+            <label><input type="radio" name="type" value="flying" onchange="filterPokemon()"> Flying</label>
+            <label><input type="radio" name="type" value="psychic" onchange="filterPokemon()"> Psychic</label>
+            <label><input type="radio" name="type" value="bug" onchange="filterPokemon()"> Bug</label>
+            <label><input type="radio" name="type" value="rock" onchange="filterPokemon()"> Rock</label>
+            <label><input type="radio" name="type" value="ghost" onchange="filterPokemon()"> Ghost</label>
+            <label><input type="radio" name="type" value="dragon" onchange="filterPokemon()"> Dragon</label>
+            <label><input type="radio" name="type" value="dark" onchange="filterPokemon()"> Dark</label>
+            <label><input type="radio" name="type" value="steel" onchange="filterPokemon()"> Steel</label>
+            <label><input type="radio" name="type" value="fairy" onchange="filterPokemon()"> Fairy</label>
+            <!-- Add any additional types if necessary -->
+        </div>
+    </div>
+
+    <!-- Pokémon Pool -->
+    <div id="pokemon-pool"></div>
+
+    <script src="Pokemon.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

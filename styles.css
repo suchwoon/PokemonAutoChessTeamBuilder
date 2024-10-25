@@ -1,0 +1,137 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+h1, h2 {
+    text-align: center;
+}
+
+#controls {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#search-bar {
+    margin-bottom: 10px;
+}
+
+#search-input {
+    width: 50%;
+    padding: 10px;
+    font-size: 16px;
+}
+
+#rarity-filter, #type-filter {
+    display: inline-block;
+    margin: 0 10px;
+    text-align: left;
+}
+
+#rarity-filter h3, #type-filter h3 {
+    margin-bottom: 5px;
+}
+
+#rarity-filter label, #type-filter label {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+#team-container {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+#synergy-display {
+    width: 200px;
+    margin-right: 20px;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+#synergy-display h2 {
+    margin-top: 0;
+}
+
+#team-content {
+    flex: 1;
+}
+
+#deck-area {
+    border: 1px solid #ccc;
+    padding: 10px;
+    min-height: 200px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+#pokemon-pool {
+    border: 1px solid #ccc;
+    padding: 10px;
+    min-height: 200px;
+    margin: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.pokemon-container {
+    position: relative;
+    margin: 5px;
+    width: 80px;
+    height: 80px;
+}
+
+.pokemon {
+    width: 80px;
+    height: 80px;
+    cursor: grab;
+}
+
+#deck-area .pokemon {
+    cursor: default;
+}
+
+.rarity-label {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(0,0,0,0.6);
+    color: #fff;
+    padding: 2px 4px;
+    font-size: 12px;
+    border-top-right-radius: 5px;
+}
+
+.rarity-label.common {
+    background-color: gray;
+}
+
+.rarity-label.uncommon {
+    background-color: green;
+}
+
+.rarity-label.rare {
+    background-color: blue;
+}
+
+.rarity-label.epic {
+    background-color: purple;
+}
+
+.rarity-label.ultra {
+    background-color: orange;
+}
+
+.rarity-label.unique {
+    background-color: red;
+}
+
+.rarity-label.legendary {
+    background-color: gold;
+}
+
+.pokemon-container.hidden {
+    display: none;
+}
