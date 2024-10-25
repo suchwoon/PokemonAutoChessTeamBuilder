@@ -189,7 +189,7 @@ function removeFromDeck(pokemonId, containerElement) {
 // Update synergies based on the current deck
 function updateSynergies() {
     const synergyDisplay = document.getElementById('synergy-display');
-    synergyDisplay.innerHTML = '<h2>Synergies</h2>';
+    synergyDisplay.innerHTML = ''; // Removed the 'Synergies' text
     const synergyCount = {};
 
     // Iterate over the deck to count types
