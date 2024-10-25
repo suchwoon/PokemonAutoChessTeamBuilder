@@ -41,7 +41,7 @@ function createPokemonRarityMapping(rarityData) {
 // Create the type filter dynamically based on the types in pokemonTypes, using images
 function createTypeFilter() {
     const typeFilterDiv = document.getElementById('type-filter');
-    typeFilterDiv.innerHTML = '<h3>Filter by Type:</h3>';
+    typeFilterDiv.innerHTML = ''; // Removed the heading
 
     // Add the 'All' option with a default icon or text
     const allLabel = document.createElement('label');
@@ -200,12 +200,38 @@ function updateSynergies() {
         });
     });
 
-    // Display the type synergies
-    for (let type in synergyCount) {
-        const p = document.createElement('p');
-        p.textContent = `${type}: ${synergyCount[type]}`;
-        synergyDisplay.appendChild(p);
-    }
+    // Convert synergyCount object into an array of [type, count] pairs
+    const synergyArray = Object.entries(synergyCount);
+
+    // Sort the array by count in descending order
+    synergyArray.sort((a, b) => b[1] - a[1]);
+
+    // Display the type synergies with icons
+    const synergyContainer = document.createElement('div');
+    synergyContainer.classList.add('synergy-icons');
+
+    synergyArray.forEach(([type, count]) => {
+        const synergyItem = document.createElement('div');
+        synergyItem.classList.add('synergy-item');
+
+        // Create the type icon
+        const typeIcon = document.createElement('img');
+        typeIcon.src = `types/${type.toUpperCase()}.svg`;
+        typeIcon.alt = type;
+        typeIcon.title = `${type.charAt(0).toUpperCase() + type.slice(1).toLowerCase()} (${count})`;
+        typeIcon.classList.add('synergy-icon');
+
+        // Create the count label
+        const countLabel = document.createElement('span');
+        countLabel.textContent = count;
+        countLabel.classList.add('synergy-count');
+
+        synergyItem.appendChild(typeIcon);
+        synergyItem.appendChild(countLabel);
+        synergyContainer.appendChild(synergyItem);
+    });
+
+    synergyDisplay.appendChild(synergyContainer);
 }
 
 // Filter Pokémon based on the search input, selected rarity, and selected type
