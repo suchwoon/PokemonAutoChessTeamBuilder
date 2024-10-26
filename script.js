@@ -169,7 +169,7 @@ function displayPokemonPool() {
         img.addEventListener('mouseover', () => displayPokemonInfo(name));
         img.addEventListener('mouseout', clearPokemonInfo);
 
-        img.addEventListener('dblclick', () => addToTeam(name));
+        img.addEventListener('click', () => addToTeam(name));
 
         const rarity = pokemonRarities[name] ? pokemonRarities[name].toLowerCase() : 'unknown';
 
@@ -242,7 +242,11 @@ function addToTeam(pokemonId) {
 
     const clone = pokemonImg.cloneNode(true);
     clone.removeEventListener('dragstart', drag);
-    clone.addEventListener('dblclick', () => removeFromDeck(pokemonId, cloneContainer));
+    clone.addEventListener('contextmenu', (event) => {
+        // Prevent the default right-click menu from appearing
+        event.preventDefault();
+        removeFromDeck(pokemonId, cloneContainer);
+      });
     clone.addEventListener('mouseover', () => displayPokemonInfo(pokemonId));
     clone.addEventListener('mouseout', clearPokemonInfo);
 
